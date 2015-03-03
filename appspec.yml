@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/wherebananas.com
+permissions: 
+  - object: /var/www/html/wherebananas.com/html
+    pattern: "**"
+    mode: 777

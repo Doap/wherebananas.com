@@ -1,0 +1,40 @@
+#!/bin/bash
+
+theuser=$1
+thesite=$2
+username=$1
+
+#echo theuser: $theuser
+thesite=`echo $theuser | sed 's/_/\./g'`; echo $thesite
+echo
+echo DevOps and Platforms Build Report $thesite
+echo deployed by: $theuser
+echo Deploy to: /home/$theuser/
+echo Local Repo: gitserver.doap.com:/opt/doap/$thesite
+echo Github Repo: https://github.com/Doap/$thesite.git
+DIRECTORY=/home/$theuser/$thesite
+  	username=`echo $site | sed 's/\./_/g'`; 
+	echo "Sync repo for $site"
+
+DIRECTORY=/home/$username/$site
+if [ -d "$DIRECTORY" ]; then
+	( cd /home/$username ; git push $site master )
+	( cd /home/$username ; git pull $site master )
+	( cd /home/$username ; git push )
+	( cd /home/$username ; git pull )
+	( cd /home/$username ; git add . )
+	( cd /home/$username ; git commit -m "scripted sync by $username" )
+	( cd /home/$username ; git push )
+	( cd /home/$username ; git pull )
+  # Control will enter here if $DIRECTORY exists.
+fi
+
+
+if [ ! -d "$DIRECTORY" ]; then
+ theip=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
+ theuser=`echo $thesite | sed 's/\./_/g'`
+ echo User: $theuser
+ echo Site: $thesite
+ git clone git@gitserver.doap.com:/opt/doap/$thesite /home/$theuser/$thesite
+ chmod -R 777 /home/$theuser/$thesite/.git
+fi
