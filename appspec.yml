@@ -1,9 +1,23 @@
-version: 0.0
-os: linux
+---
 files:
-  - source: /
+  -
     destination: /var/www/html/wherebananas.com
-permissions: 
-  - object: /var/www/html/wherebananas.com/html
-    pattern: "**"
+    source: /
+hooks:
+  AfterInstall:
+    -
+      location: scripts/make_softlinks.sh
+      timeout: 180
+  BeforeInstall:
+    -
+      location: scripts/makedirs.sh
+      timeout: 180
+os: linux
+permissions:
+  -
+    group: apache
     mode: 777
+    object: /var/www/html/wherebananas.com
+    owner: apache
+    pattern: "**"
+version: 0.0
